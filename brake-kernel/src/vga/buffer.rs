@@ -24,7 +24,7 @@ impl Writer {
         match b {
             b'\n' => self.new_line(),
             byte => {
-                if self.column_pos > BUFFER_WIDTH {
+                if self.column_pos >= BUFFER_WIDTH {
                     self.new_line()
                 }
 

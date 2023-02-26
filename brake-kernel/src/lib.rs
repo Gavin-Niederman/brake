@@ -6,7 +6,7 @@
 #[macro_use]
 pub mod vga;
 
-mod idt;
+mod interrupts;
 pub mod gdt;
 
 use core::panic::PanicInfo;
@@ -19,7 +19,10 @@ fn panic(info: &PanicInfo) -> ! {
 }
 
 pub fn spin() -> ! {
-    loop {}
+    loop {
+        core::hint::spin_loop();
+        x86_64::instructions::hlt();
+    }
 }
 
 #[cfg(test)]
@@ -32,9 +35,7 @@ fn test_runner(tests: &[&dyn Fn()]) {
 
 pub fn init() {
     unsafe {
-        idt::init_idt();
-        println!("Initialized IDT");
-        gdt::init_gdt();
-        println!("Initialized GDT and TSS");
+        gdt::init();
+        interrupts::init();
     }
 }

@@ -1,8 +1,11 @@
-use core::fmt::{Write, self};
+use core::fmt::{self, Write};
 
 use spin::Mutex;
 
-use crate::vga::{char::{VGACharAttribs, Color}, buffer::VGABuffer};
+use crate::vga::{
+    buffer::VGABuffer,
+    char::{Color, VGACharAttribs},
+};
 
 use super::buffer::Writer;
 
@@ -15,8 +18,7 @@ lazy_static::lazy_static! {
 }
 
 pub fn _print(args: fmt::Arguments) {
-    let mut writer = WRITER.lock();
-    writer.write_fmt(args).ok();
+    x86_64::instructions::interrupts::without_interrupts(|| WRITER.lock().write_fmt(args).ok());
 }
 
 #[macro_export]
