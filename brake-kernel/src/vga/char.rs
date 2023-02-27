@@ -39,6 +39,7 @@ impl VGACharAttribs {
     }
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Copy)]
 #[repr(u8)]
 pub enum Color {
